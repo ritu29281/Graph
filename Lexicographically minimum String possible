@@ -1,0 +1,37 @@
+Input: s1 = "parker", s2 = "morris", baseStr = "parser"
+Output: "makkek"
+Explanation: Based on the equivalency information in s1 and s2, we can group their characters as [m,p], [a,o], [k,r,s], [e,i].
+The characters in each group are equivalent and sorted in lexicographical order.
+So the answer is "makkek".
+
+CODE:
+
+char DFS( unordered_map<char,vector<char>>&adj, char currch, vector<int>& visited){
+        visited[currch-'a']=1;
+        char minchar= currch;
+        for(char v:adj[currch]){
+            if(visited[v-'a']==0){
+               minchar=min(minchar,DFS(adj,v,visited));
+            }
+        }
+        return minchar;
+    }
+    string smallestEquivalentString(string s1, string s2, string baseStr) {
+        int n=s1.size();
+        int m=baseStr.size();
+        unordered_map<char,vector<char>>adj;
+        for(int i=0;i<n;i++){
+            char u= s1[i];
+            char v= s2[i];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+        string result;
+        for(int i=0;i<m;i++){
+            char ch=baseStr[i];
+            vector<int>visited(26,0);
+            char minchar=DFS(adj,ch,visited);
+            result.push_back(minchar);
+        }
+        return result;
+    }
