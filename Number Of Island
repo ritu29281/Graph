@@ -1,0 +1,40 @@
+class Solution {
+public:
+    void bfs(int row,int col,vector<vector<char>>& grid,map<pair<int,int>,bool>&vis,int m,int n){
+        queue<pair<int,int>>q;
+        q.push({row,col});
+        vis[{row,col}]=true;
+        while(!q.empty()){
+           pair<int,int> fnode=q.front();
+            q.pop();
+            int x=fnode.first;
+            int y=fnode.second;
+            int dx[]={-1,0,1,0};
+            int dy[]={0,1,0,-1};
+            for(int i=0;i<4;i++){
+                int newx=x+dx[i];
+                int newy=y+dy[i];
+                if( newx>=0 && newx<n && newy>=0 && newy<m &&!vis[{newx,newy}]&& grid[newx][newy]=='1'){
+                    q.push({newx,newy});
+                    vis[{newx,newy}]=true;
+                }
+            }
+        }
+    }
+    int numIslands(vector<vector<char>>& grid) {
+        int n=grid.size();
+        
+        int ans=0;
+        map<pair<int,int>,bool>vis;
+        for(int i=0;i<n;i++){
+            int m=grid[i].size();
+            for(int j=0;j<m;j++){
+                if(!vis[{i,j}] && grid[i][j]=='1'){
+                    bfs(i,j, grid,vis,m,n);
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+};
