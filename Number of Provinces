@@ -1,0 +1,31 @@
+Input: isConnected = [[1,1,0],[1,1,0],[0,0,1]]
+Output: 2
+
+class Solution {
+public:
+  void dfs(int row, map<int,bool>&vis,vector<vector<int>>& isConnected,int n,int m){
+     vis[row]=true;
+      for(int col=0;col<m;col++){
+          if(row!=col && isConnected[row][col]==1){
+             if(!vis[col]){
+                  dfs(col,vis,isConnected,n,m);
+             }
+          }
+      }
+  }
+    int findCircleNum(vector<vector<int>>& isConnected) {
+      int n= isConnected.size();
+      int m= isConnected[0].size();
+      int count=0;
+     map<int,bool>vis;
+      for( int row=0;row<n;row++){
+        
+              if(!vis[row]){
+                  dfs(row,vis,isConnected,n,m);
+                  count++;
+              }
+          
+      }  
+      return count;
+    }
+};
