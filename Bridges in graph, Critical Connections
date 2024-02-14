@@ -1,0 +1,43 @@
+class Solution {
+public:
+   
+
+  
+  void bridge(int src , int parent , vector<int>&low ,vector<int>&tin , vector<int>&vis , vector<int> adj[] , int &timer,  vector<vector<int>> & ans){
+      vis[src]=1;
+      tin[src]=timer;
+      low[src]=timer;
+      timer++;
+     
+      for(auto nbr:adj[src]){
+          if( nbr==parent){
+             continue; 
+          }
+         
+         else if(!vis[nbr] ){
+              bridge(nbr,src,low,tin,vis,adj,timer,ans);
+              low[src]=min(low[nbr],low[src]);
+               if(low[nbr] > tin[src]){
+                    if(nbr> src) ans.push_back({src,nbr});
+                    else ans.push_back({nbr,src});
+                }
+          }
+         
+          else{
+              low[src]=min(low[nbr],low[src]);
+          }
+      }
+      
+   }
+	vector<vector<int>>criticalConnections(int v, vector<int> adj[]){
+	   vector<int>tin(v,0);
+	   vector<int>low(v,0);
+	   vector<vector<int>>ans;
+	   vector<int>vis(v,0);
+	   int timer=0; 
+	 
+	    bridge(0 ,-1 , low , tin , vis , adj , timer , ans);
+	    sort(ans.begin(),ans.end());
+	   return ans;
+	}
+};
