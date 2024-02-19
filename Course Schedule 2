@@ -1,0 +1,42 @@
+class Solution {
+public:
+    vector<int>solve(int numCourses, map<int,list<int>>&adjlist){
+        queue<int>q;
+        map<int,int>indegree;
+        vector<int>ans;
+        for(auto src: adjlist){
+            for(auto nbr: src.second){
+                indegree[nbr]++;
+            }
+        }
+        for(int i=0;i<numCourses;i++){
+            if(indegree[i]==0){
+                q.push(i);
+            }
+        }
+        while(!q.empty()){
+            int fnode=q.front();
+            q.pop();
+            ans.push_back(fnode);
+            for(auto nbr: adjlist[fnode]){
+                indegree[nbr]--;
+                if(indegree[nbr]==0){
+                    q.push(nbr);
+                }
+            }
+        }
+        if(ans.size()==numCourses){
+            return ans;
+        }
+        return {};
+    }
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+      map<int,list<int>>adjlist;
+        for(auto it:prerequisites){
+            int u=it[0];
+            int v=it[1];
+            adjlist[v].push_back(u);
+        }
+       return solve(numCourses, adjlist);
+    }
+};
