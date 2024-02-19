@@ -1,0 +1,49 @@
+Input: numCourses = 2, prerequisites = [[1,0]]
+Output: true
+Explanation: There are a total of 2 courses to take. 
+To take course 1 you should have finished course 0. So it is possible.
+
+
+class Solution {
+public:
+    bool solve( map<int,list<int>>&adjlist,int numCourses){
+        queue<int>q;
+        vector<int>ans;
+        map<int,int>indegree;
+        for(auto src:adjlist){
+           
+            for(auto nbr:src.second){
+                indegree[nbr]++;
+            }
+        }
+        for(int i=0;i<numCourses;i++){
+            if(indegree[i]==0){
+                q.push(i);
+            }
+        }
+        while(!q.empty()){
+            auto fnode= q.front();
+            ans.push_back(fnode);
+            q.pop();
+            for(auto nbr:adjlist[fnode]){
+                indegree[nbr]--;
+                if(indegree[nbr]==0){
+                    q.push(nbr);
+                }
+            }
+        }
+       if(ans.size()==numCourses){
+           return true;
+       } 
+      return false;  
+    }
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+      map<int,list<int>>adjlist;
+        for(auto it:prerequisites){
+            int u=it[0];
+            int v=it[1];
+            adjlist[v].push_back(u);
+        }
+       return solve(adjlist,numCourses);
+    }
+};
